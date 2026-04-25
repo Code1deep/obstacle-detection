@@ -23,5 +23,20 @@ Détecter automatiquement les obstacles cognitifs à partir des traces d'apprent
 
 ## Utilisation
 ```python
+from analyseur import Analyser
 from detect_linearite import analyse_raisonnement
+
+# À partir d'une trace d'apprenant (série temporelle)
 resultat = analyse_raisonnement(trace_apprenant)
+
+print(f"Obstacle détecté : {resultat.obstacle}")
+print(f"Confiance : {resultat.confiance}")
+print(f"Détails : {resultat.details}")
+
+
+## Installation
+
+```bash
+git clone https://github.com/Code1deep/obstacle-detection.git
+cd obstacle-detection
+pip install -r requirements.txt
