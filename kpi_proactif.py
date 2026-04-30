@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 """
-kpi_proactif.py – Indice d'Anticipation (KPI Proactif)
-Mesure l'écart entre le signal faible et l'action corrective.
-Valide le passage du raisonnement réactif au raisonnement proactif.
+kpi_proactif.py - Indice d'Anticipation (KPI Proactif)
+Mesure l'ecart entre le signal faible et l'action corrective.
+Valide le passage du raisonnement reactif au raisonnement proactif.
 """
 
 from datetime import datetime, timedelta
@@ -10,11 +11,11 @@ import json
 
 class KPIAnticipation:
     """
-    Calcule le score de proactivité de l'apprenant.
+    Calcule le score de proactivite de l'apprenant.
     
-    Le KPI d'Anticipation évalue la capacité à intervenir 
+    Le KPI d'Anticipation evalue la capacite a intervenir 
     avant qu'un seuil critique ne soit atteint, sur la base
-    des alertes prédictives générées par la BDI.
+    des alertes predictives generees par la BDI.
     """
     
     def __init__(self):
@@ -26,19 +27,19 @@ class KPIAnticipation:
                 t_critique: Union[datetime, float],
                 verbose: bool = False) -> float:
         """
-        Calcule le score de proactivité.
+        Calcule le score de proactivite.
         
-        Paramètres:
-            t_alerte   : Moment de l'alerte prédictive BDI (Signal faible)
+        Parametres:
+            t_alerte   : Moment de l'alerte predictive BDI (Signal faible)
             t_action   : Moment de l'intervention de l'apprenant
-            t_critique : Moment estimé du seuil critique (crash système)
-            verbose    : Affiche les détails du calcul
+            t_critique : Moment estime du seuil critique (crash systeme)
+            verbose    : Affiche les details du calcul
             
         Retourne:
             Score compris entre 0 et 100
         """
         
-        # Convertir en secondes si nécessaire (pour compatibilité avec variantes)
+        # Convertir en secondes si necessaire (pour compatibilite avec variantes)
         if isinstance(t_alerte, datetime):
             t_alerte = t_alerte.timestamp()
         if isinstance(t_action, datetime):
@@ -49,26 +50,26 @@ class KPIAnticipation:
         fenetre_decision = t_critique - t_alerte
         delai_reaction = t_action - t_alerte
         
-        # Cas d'échec : action trop tardive ou inexistante
+        # Cas d'echec : action trop tardive ou inexistante
         if t_action >= t_critique:
             score = 0.0
-            niveau = "Échec – Action hors délai"
+            niveau = "Echec - Action hors delai"
         elif delai_reaction <= 0:
             score = 100.0
-            niveau = "Parfait – Action avant l'alerte"
+            niveau = "Parfait - Action avant l'alerte"
         else:
             # Plus l'action est proche de l'alerte (et loin de la crise), plus le score est haut
             score = (1 - (delai_reaction / fenetre_decision)) * 100
             score = round(max(0, min(100, score)), 2)
             
             if score >= 80:
-                niveau = "Martinet Confirmé – Anticipation exceptionnelle"
+                niveau = "Martinet Confirme - Anticipation exceptionnelle"
             elif score >= 60:
-                niveau = "Martinet en Vol – Anticipation satisfaisante"
+                niveau = "Martinet en Vol - Anticipation satisfaisante"
             elif score >= 40:
-                niveau = "Martinet Apprenti – Anticipation en construction"
+                niveau = "Martinet Apprenti - Anticipation en construction"
             else:
-                niveau = "Poussin – Réaction tardive (post-urgence)"
+                niveau = "Poussin - Reaction tardive (post-urgence)"
         
         # Enregistrement dans l'historique
         self.historique_scores.append({
@@ -80,20 +81,20 @@ class KPIAnticipation:
         })
         
         if verbose:
-            print(f"📊 KPI d'Anticipation")
-            print(f"   Fenêtre de décision : {fenetre_decision:.0f} secondes")
-            print(f"   Délai de réaction   : {delai_reaction:.0f} secondes")
-            print(f"   Score               : {score}%")
-            print(f"   Niveau              : {niveau}")
+            print("KPI d'Anticipation")
+            print("   Fenetre de decision : {:.0f} secondes".format(fenetre_decision))
+            print("   Delai de reaction   : {:.0f} secondes".format(delai_reaction))
+            print("   Score               : {}%".format(score))
+            print("   Niveau              : {}".format(niveau))
         
         return score
     
     def evaluer_serie(self, evenements: list) -> dict:
         """
-        Évalue une série d'événements et retourne des statistiques.
+        Evalue une serie d'evenements et retourne des statistiques.
         
-        Paramètres:
-            evenements: Liste de dictionnaires avec clés 't_alerte', 't_action', 't_critique'
+        Parametres:
+            evenements: Liste de dictionnaires avec cles 't_alerte', 't_action', 't_critique'
         """
         scores = []
         for evt in evenements:
@@ -110,12 +111,12 @@ class KPIAnticipation:
         }
     
     def generer_rapport_longitudinal(self) -> dict:
-        """Génère un rapport de progression sur la durée."""
+        """Genere un rapport de progression sur la duree."""
         if not self.historique_scores:
-            return {"erreur": "Aucune donnée historique"}
+            return {"erreur": "Aucune donnee historique"}
         
         scores = [entry["score"] for entry in self.historique_scores]
-        tendance = "Progression" if scores[-1] > scores[0] else "Régression" if scores[-1] < scores[0] else "Stable"
+        tendance = "Progression" if scores[-1] > scores[0] else "Regression" if scores[-1] < scores[0] else "Stable"
         
         return {
             "score_initial": scores[0],
@@ -127,8 +128,8 @@ class KPIAnticipation:
         }
 
 
-# SIMULATION DE SCÉNARIO POUR L'ORAL
-# ----------------------------------
+# SIMULATION DE SCENARIO POUR L'ORAL
+# ------------------------------------
 if __name__ == "__main__":
     print("=" * 60)
     print("SIMULATION DU KPI D'ANTICIPATION")
@@ -136,33 +137,33 @@ if __name__ == "__main__":
     
     kpi = KPIAnticipation()
     
-    # Paramètres du scénario
-    # Alerte à t=0 (10:00), seuil critique à t=60 (11:00)
+    # Parametres du scenario
+    # Alerte a t=0 (10:00), seuil critique a t=60 (11:00)
     alerte = 0
     critique = 60
     
-    print("\n📈 Scénario 1 : Le Martinet Confirmé (Action à 10:15)")
+    print("\nScenario 1 : Le Martinet Confirme (Action a 10:15)")
     score_a = kpi.evaluer(alerte, 15, critique, verbose=True)
     
-    print("\n📉 Scénario 2 : Le Poussin Réactif (Action à 10:55)")
+    print("\nScenario 2 : Le Poussin Reactif (Action a 10:55)")
     score_b = kpi.evaluer(alerte, 55, critique, verbose=True)
     
-    print("\n📊 Scénario 3 : Série d'événements (Suivi longitudinal)")
+    print("\nScenario 3 : Serie d'evenements (Suivi longitudinal)")
     evenements_test = [
         {"t_alerte": 0, "t_action": 50, "t_critique": 60},   # Poussin
-        {"t_alerte": 0, "t_action": 35, "t_critique": 60},   # Goéland
+        {"t_alerte": 0, "t_action": 35, "t_critique": 60},   # Goeland
         {"t_alerte": 0, "t_action": 20, "t_critique": 60},   # Martinet
-        {"t_alerte": 0, "t_action": 12, "t_critique": 60},   # Martinet Confirmé
+        {"t_alerte": 0, "t_action": 12, "t_critique": 60},   # Martinet Confirme
     ]
     
     for i, evt in enumerate(evenements_test, 1):
         score = kpi.evaluer(evt['t_alerte'], evt['t_action'], evt['t_critique'])
-        print(f"   Épisode {i} : Score = {score}%")
+        print("   Episode {} : Score = {}%".format(i, score))
     
-    print("\n📈 Rapport longitudinal :")
+    print("\nRapport longitudinal :")
     rapport = kpi.generer_rapport_longitudinal()
-    print(f"   Évolution : {rapport['evolution']:.2f} points")
-    print(f"   Tendance : {rapport['tendance']}")
+    print("   Evolution : {:.2f} points".format(rapport['evolution']))
+    print("   Tendance : {}".format(rapport['tendance']))
     
     print("\n" + "=" * 60)
-    print("✅ Fin de la simulation")
+    print("Fin de la simulation")
